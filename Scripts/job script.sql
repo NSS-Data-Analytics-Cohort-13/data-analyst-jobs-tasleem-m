@@ -12,6 +12,7 @@ LIMIT 10
 SELECT location, COUNT (title) AS count_postings_TN_and_KY
 FROM data_analyst_jobs
 WHERE (location = 'TN' OR location = 'KY')
+--WHERE location IN ('TN', 'KY')
 GROUP BY location
 
 --q4 How many postings in Tennessee have a star rating above 4?
@@ -44,29 +45,32 @@ WHERE location = 'CA'
 --q9 How many companies are there with more that 5000 reviews across all locations?
 SELECT company, AVG (star_rating) AS avg_star_rating
 FROM data_analyst_jobs
-WHERE company IS NOT NULL AND review_count > 5000
+WHERE company IS NOT NULL --AND review_count > 5000
 GROUP BY company
+HAVING MIN(review_count) > 5000
 --answer: 40
 
 --q10 Which company with more than 5000 reviews across all locations in the dataset has the highest star rating? What is that rating?
 SELECT company, AVG (star_rating) AS avg_star_rating
 FROM data_analyst_jobs
-WHERE company IS NOT NULL AND review_count > 5000
+WHERE company IS NOT NULL --AND review_count > 5000
 GROUP BY company
+HAVING MIN(review_count) > 5000
 ORDER BY avg_star_rating DESC
---answer: Unilever with avg_star_rating of 4.1999998090000000
+--answer: Nike with avg_star_rating of 4.1999998090000000
 
 --q11 Find all the job titles that contain the word ‘Analyst’. How many different job titles are there?
 
 SELECT COUNT (DISTINCT title) AS count_distinct_analyst_titles
 FROM data_analyst_jobs
-WHERE title LIKE '%Analyst%'
+WHERE title ILIKE '%Analyst%'
 
 --q12 How many different job titles do not contain either the word ‘Analyst’ or the word ‘Analytics’? What word do these positions have in common?
 
 SELECT DISTINCT title
 FROM data_analyst_jobs
-WHERE (title NOT LIKE '%Analyst%' AND title NOT LIKE '%Analytics%')
-AND (title NOT LIKE '%analyst%' AND title NOT LIKE '%analytics%')
-AND (title NOT LIKE '%ANALYST%' AND title NOT LIKE '%ANALYTICS%')
+WHERE title NOT ILIKE '%Analyst%' AND title NOT ILIKE '%Analytics%'
+--WHERE (title NOT LIKE '%Analyst%' AND title NOT LIKE '%Analytics%')
+--AND (title NOT LIKE '%analyst%' AND title NOT LIKE '%analytics%')
+--AND (title NOT LIKE '%ANALYST%' AND title NOT LIKE '%ANALYTICS%')
 --answer: 4; Tableau
